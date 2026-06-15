@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "brasa - A verdadeira pizza artesanal moderna",
+  title: "Imprevisto - Tradição e Estilo para Homens Modernos",
   description:
-    "Descubra o sabor da tradição italiana com um toque contemporâneo. Massa leve, bordas aeradas e ingredientes rigorosamente selecionados.",
+    "Imprevisto é a barbearia premium que combina técnicas clássicas de corte e barba com um ambiente sofisticado. Agende sua experiência de autocuidado hoje mesmo!",
 };
 
 export default function RootLayout({

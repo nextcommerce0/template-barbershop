@@ -1,101 +1,176 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Image from "next/image";
+import { AnimatePresence, motion } from "framer-motion";
 
-interface ImageItem {
-  src: string;
-  alt: string;
-}
+const categories = [
+  { id: "todos", label: "Todos" },
+  { id: "cortes", label: "Cabelo" },
+  { id: "barba", label: "Barba" },
+  { id: "ambiente", label: "O Espaço" },
+];
+
+const photos = [
+  {
+    id: 1,
+    category: "cortes",
+    url: "/degrade.jpg",
+    alt: "Corte Degradê Navalhado",
+  },
+  {
+    id: 2,
+    category: "barba",
+    url: "/barba.jpg",
+    alt: "Terapia de Barba Clássica",
+  },
+  {
+    id: 3,
+    category: "ambiente",
+    url: "/cadeira.jpg",
+    alt: "Cadeiras de Couro Vintage",
+  },
+  {
+    id: 4,
+    category: "cortes",
+    url: "/classico.jpg",
+    alt: "Corte Clássico Executivo",
+  },
+  {
+    id: 5,
+    category: "barba",
+    url: "/quente.jpg",
+    alt: "Alinhamento com Toalha Quente",
+  },
+  {
+    id: 6,
+    category: "ambiente",
+    url: "/produtos.jpg",
+    alt: "Produtos de Cuidado Masculino",
+  },
+];
 
 export default function Gallery() {
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [activeFilter, setActiveFilter] = useState("todos");
 
-  // Array preparado para as suas 4 fotos da galeria
-  const galleryImages: ImageItem[] = [
-    { src: "/forno.jpg", alt: "Nosso forno a lenha artesanal" },
-    { src: "/massa.jpg", alt: "Mãos do chef abrindo a massa com amor" },
-    { src: "/local.jpg", alt: "Ambiente interno aconchegante da pizzaria" },
-    { src: "/horta.jpg", alt: "Ingredientes frescos selecionados da horta" },
-  ];
+  const filteredPhotos = useMemo(() => {
+    if (activeFilter === "todos") return photos;
 
-  const prevSlide = (): void => {
-    const isFirstSlide = currentIndex === 0;
-    const newIndex = isFirstSlide ? galleryImages.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-  };
-
-  const nextSlide = (): void => {
-    const isLastSlide = currentIndex === galleryImages.length - 1;
-    const newIndex = isLastSlide ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-  };
+    return photos.filter((photo) => photo.category === activeFilter);
+  }, [activeFilter]);
 
   return (
-    <div className="relative w-full lg:w-1/2 group">
-      {/* Detalhe estético de moldura traseira */}
-      <div className="absolute -bottom-4 -right-4 -z-10 h-full w-full rounded-3xl border-2 border-[#2C4233]/20" />
-      
-      {/* Container de exibição das imagens */}
-      <div className="relative h-87.5 w-full overflow-hidden rounded-3xl sm:h-112.5 shadow-lg bg-[#2C4233]/5">
-        {galleryImages.map((image, index) => (
-          <div
-            key={index}
-            className={`absolute inset-0 h-full w-full transition-opacity duration-700 ease-in-out ${
-              index === currentIndex ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
-          >
-            <Image
-              src={image.src}
-              alt={image.alt}
-              fill
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover"
-              priority={index === 0}
-            />
-            {/* Legenda da foto atual */}
-            <div className="absolute bottom-0 inset-x-0 bg-linear-to-t from-black/60 to-transparent p-6 pt-12 text-white text-sm font-medium">
-              {image.alt}
-            </div>
-          </div>
-        ))}
-
-        {/* Seta Esquerda */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/80 p-2.5 text-[#2C4233] shadow-md backdrop-blur-sm transition-all hover:bg-white md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
-          aria-label="Foto anterior"
+    <section
+      id="gallery"
+      className="border-b border-[#1B2A47]/5 bg-[#FAF9F6] py-16 md:py-24 lg:py-28"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* TÍTULO */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="mx-auto mb-12 max-w-3xl text-center"
         >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
+          <span className="text-xs font-bold uppercase tracking-widest text-[#9E1B1B] md:text-sm">
+            Galeria de Estilos
+          </span>
 
-        {/* Seta Direita */}
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 z-20 -translate-y-1/2 rounded-full bg-white/80 p-2.5 text-[#2C4233] shadow-md backdrop-blur-sm transition-all hover:bg-white md:opacity-0 md:group-hover:opacity-100 cursor-pointer"
-          aria-label="Próxima foto"
-        >
-          <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
+          <h2 className="mt-2 mb-4 text-3xl font-extrabold tracking-tight text-[#1B2A47] sm:text-4xl">
+            Nosso trabalho fala por nós
+          </h2>
 
-        {/* Indicadores de bolinha (Dots) */}
-        <div className="absolute bottom-6 right-6 z-20 flex gap-1.5">
-          {galleryImages.map((_, index) => (
+          <p className="text-base leading-relaxed text-[#4A5568]">
+            Dê uma olhada no padrão de acabamento e na atmosfera que esperam por
+            você no nosso espaço.
+          </p>
+        </motion.div>
+
+        {/* FILTROS */}
+        <div className="mb-10 flex gap-2 overflow-x-auto pb-2 md:justify-center">
+          {categories.map((cat) => (
             <button
-              key={index}
-              onClick={() => setCurrentIndex(index)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex ? "w-6 bg-[#D64527]" : "w-2 bg-white/50"
+              key={cat.id}
+              type="button"
+              onClick={() => setActiveFilter(cat.id)}
+              className={`shrink-0 rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-200 ${
+                activeFilter === cat.id
+                  ? "bg-[#1B2A47] text-[#FAF9F6] shadow-sm"
+                  : "bg-[#1B2A47]/5 text-[#4A5568] hover:bg-[#1B2A47]/10"
               }`}
-              aria-label={`Ir para foto ${index + 1}`}
-            />
+            >
+              {cat.label}
+            </button>
           ))}
         </div>
+
+        {/* GRID */}
+        <motion.div
+          layout
+          className="grid min-h-125 grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+        >
+          <AnimatePresence mode="popLayout">
+            {filteredPhotos.map((photo) => (
+              <motion.div
+                key={photo.id}
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.25 }}
+                className="
+                  group
+                  relative
+                  overflow-hidden
+                  rounded-xl
+                  border
+                  border-[#1B2A47]/10
+                  bg-[#1B2A47]/5
+                  shadow-sm
+                  hover:shadow-xl
+                "
+              >
+                <div className="relative aspect-4/5">
+                  <Image
+                    src={photo.url}
+                    alt={photo.alt}
+                    fill
+                    sizes="(max-width: 640px) 100vw,
+                           (max-width: 1024px) 50vw,
+                           33vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                </div>
+
+                <div
+                  className="
+                    absolute inset-0
+                    flex flex-col justify-end
+                    bg-[#1B2A47]/80
+                    p-6
+                    opacity-0
+                    transition-opacity duration-300
+                    group-hover:opacity-100
+                  "
+                >
+                  <span className="mb-1 text-xs font-bold uppercase tracking-wider text-[#9E1B1B]">
+                    {photo.category === "cortes"
+                      ? "Corte"
+                      : photo.category === "barba"
+                        ? "Barba"
+                        : "Ambiente"}
+                  </span>
+
+                  <h3 className="text-lg font-bold text-[#FAF9F6]">
+                    {photo.alt}
+                  </h3>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
-    </div>
+    </section>
   );
 }

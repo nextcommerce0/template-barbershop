@@ -1,62 +1,228 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "framer-motion";
+
+const images = [
+  {
+    src: "/hero.jpg",
+    alt: "",
+    className: "left-4 top-10 w-40 lg:left-8 lg:w-56 -rotate-6",
+    delay: 0,
+  },
+  {
+    src: "/hero2.jpg",
+    alt: "",
+    className: "left-24 top-72 w-36 lg:left-40 lg:w-44 rotate-3",
+    delay: 0.1,
+  },
+  {
+    src: "/hero3.jpg",
+    alt: "",
+    className: "right-10 top-16 w-40 lg:right-16 lg:w-56 rotate-6",
+    delay: 0.2,
+  },
+  {
+    src: "/hero4.jpg",
+    alt: "",
+    className: "right-32 bottom-16 w-36 lg:right-48 lg:w-44 -rotate-3",
+    delay: 0.3,
+  },
+  {
+    src: "/hero5.jpg",
+    alt: "",
+    className: "left-1/2 top-0 w-32 -translate-x-1/2 rotate-2",
+    delay: 0.4,
+  },
+  {
+    src: "/hero6.jpg",
+    alt: "",
+    className: "left-1/2 bottom-0 w-32 -translate-x-1/2 -rotate-2",
+    delay: 0.5,
+  },
+];
 
 export default function Hero() {
   return (
-    <section className="relative w-full h-[85vh] min-h-125 flex items-center overflow-hidden">
-      
-      {/* 1. IMAGEM DE FUNDO (OTIMIZADA PELO NEXT.JS) */}
-      <Image
-        src="/pizzahero.jpg" // Substitua por uma foto da pizza em alta resolução
-        alt="Fundo da pizzaria com forno a lenha ou ingredientes"
-        fill
-        priority
-        quality={85}
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+    <section
+      id="hero"
+      className="
+        relative flex min-h-[90svh]
+        items-center justify-center
+        overflow-hidden
+        border-b border-[#1B2A47]/10
+        bg-[#FAF9F6]
+      "
+    >
+      {/* GRADIENTE */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(158,27,27,0.06),transparent_60%)]" />
 
-      {/* 2. OVERLAY ESCURO (Garante o contraste do texto com o Verde Oliva) */}
-      <div className="absolute inset-0 bg-linear-to-r from-[#2C4233]/90 via-[#2C4233]/70 to-transparent" />
-
-      {/* 3. CONTEÚDO POR CIMA DO FUNDO */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-6 lg:px-12">
-        <div className="flex flex-col items-center text-center md:max-w-xl md:items-start md:text-left">
-          
-          {/* Tag de destaque */}
-          <span className="mb-4 rounded-full bg-[#F5F0E6]/20 border border-[#F5F0E6]/30 px-4 py-1.5 text-xs font-bold tracking-wider text-[#F5F0E6] uppercase backdrop-blur-sm">
-            🍕 Fermentação Natural de 48h
-          </span>
-          
-          {/* O texto agora muda para Farina (#F5F0E6) para contrastar com o fundo escuro */}
-          <h1 className="text-4xl font-extrabold tracking-tight text-[#F5F0E6] sm:text-5xl lg:text-6xl lg:leading-tight">
-            A verdadeira pizza <br />
-            <span className="text-[#DFB15B]">artesanal moderna.</span>
-          </h1>
-          
-          <p className="mt-6 text-base leading-relaxed text-[#F5F0E6]/80 md:text-lg">
-            Massa leve, bordas aeradas e ingredientes rigorosamente selecionados. Descubra o sabor da tradição italiana com um toque contemporâneo.
-          </p>
-          
-          {/* Botões de Ação */}
-          <div className="mt-8 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
-            <Link 
-              href="#cardapio" 
-              className="w-full sm:w-auto rounded-full bg-[#D64527] px-8 py-4 text-center font-bold text-white shadow-lg transition-all duration-300 hover:bg-[#b8351a] hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 active:scale-95"
-            >
-              Ver Cardápio
-            </Link>
-            
-            <Link 
-              href="#sobre" 
-              className="w-full sm:w-auto rounded-full border-2 border-[#F5F0E6] px-8 py-3.5 text-center font-bold text-[#F5F0E6] transition-all hover:-translate-y-0.5 active:translate-y-0 duration-300 hover:bg-[#F5F0E6] hover:text-[#2C4233] active:scale-95"
-            >
-              Nossa História
-            </Link>
-          </div>
-
-        </div>
+      {/* IMAGENS FLUTUANTES */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+      >
+        {images.map((image) => (
+          <motion.div
+            key={image.src}
+            initial={{
+              opacity: 0,
+              y: 80,
+              scale: 0.8,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            viewport={{ once: true }}
+            transition={{
+              duration: 0.8,
+              delay: image.delay,
+            }}
+            className={`
+              absolute
+              overflow-hidden
+              rounded-2xl
+              border border-[#1B2A47]/10
+              bg-white
+              shadow-2xl
+              ${image.className}
+            `}
+          >
+            <div className="relative aspect-3/4">
+              <Image
+                src={image.src}
+                alt={image.alt}
+                fill
+                sizes="300px"
+                className="object-cover"
+              />
+            </div>
+          </motion.div>
+        ))}
       </div>
+
+      {/* CONTEÚDO */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="
+          relative z-10
+          mx-auto max-w-5xl
+          px-4 py-16
+          text-center
+          sm:px-6
+          md:py-24
+          lg:px-8
+        "
+      >
+        {/* BADGE */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="
+            mb-6 inline-flex items-center gap-2
+            rounded-full
+            border border-[#1B2A47]/10
+            bg-white/80
+            px-4 py-2
+            backdrop-blur-sm
+          "
+        >
+          <span className="h-2 w-2 rounded-full bg-[#9E1B1B] animate-pulse" />
+
+          <span className="text-xs font-bold uppercase tracking-widest text-[#1B2A47]">
+            Agenda aberta para esta semana
+          </span>
+        </motion.div>
+
+        {/* TITULO */}
+        <motion.h1
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="
+            mb-6
+            text-4xl font-black uppercase
+            leading-[0.95]
+            tracking-tight
+            text-[#1B2A47]
+            sm:text-6xl
+            md:text-7xl
+            lg:text-8xl
+          "
+        >
+          O CORTE IMPREVISTO.
+          <br />
+          <span className="mt-2 block text-[#9E1B1B]">A TRADIÇÃO EXIGIDA.</span>
+        </motion.h1>
+
+        {/* TEXTO */}
+        <motion.p
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="
+            mx-auto mb-10 max-w-2xl
+            text-base font-medium
+            leading-relaxed
+            text-[#4A5568]
+            sm:text-lg
+            md:text-xl
+          "
+        >
+          Elevamos a sua experiência de autocuidado através de técnicas
+          refinadas de corte e barba. Um ambiente feito para o homem moderno que
+          não abre mão do clássico.
+        </motion.p>
+
+        {/* BOTÕES */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+        >
+          <Link
+            href="#cta"
+            className="
+              inline-flex w-full items-center justify-center
+              rounded-md bg-[#9E1B1B]
+              px-10 py-5
+              text-base font-black uppercase tracking-wider
+              text-[#FAF9F6]
+              shadow-xl
+              transition-all duration-300
+              hover:-translate-y-1
+              hover:bg-[#821414]
+              sm:w-auto
+            "
+          >
+            Agendar Experiência
+          </Link>
+
+          <Link
+            href="#about"
+            className="
+              inline-flex w-full items-center justify-center
+              rounded-md border border-[#1B2A47]
+              px-10 py-5
+              text-base font-bold uppercase tracking-wider
+              text-[#1B2A47]
+              transition-all duration-300
+              hover:bg-[#1B2A47]
+              hover:text-[#FAF9F6]
+              sm:w-auto
+            "
+          >
+            Descobrir Mais
+          </Link>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }

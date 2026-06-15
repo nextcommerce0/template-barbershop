@@ -1,79 +1,155 @@
-import Gallery from "./Gallery"; // Certifique-se de ajustar o caminho da importação de acordo com sua pasta
+import Image from 'next/image';
 
-interface TopicItem {
-  id: number;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-}
+const steps = [
+  {
+    num: '01',
+    title: 'Agendamento Prático',
+    desc: 'Escolha seu profissional e horário em poucos cliques pelo site ou WhatsApp.',
+  },
+  {
+    num: '02',
+    title: 'Consultoria de Estilo',
+    desc: 'Antes da tesoura, analisamos seu visagismo e formato de rosto para o melhor caimento.',
+  },
+  {
+    num: '03',
+    title: 'Execução Premium',
+    desc: 'Corte cirúrgico combinado com navalha, toalha quente e produtos importados.',
+  },
+];
 
 export default function About() {
-  const topics: TopicItem[] = [
-    {
-      id: 1,
-      title: "Feita com Amor",
-      description: "Cada disco de massa é aberto à mão com carinho, mantendo a tradição viva e garantindo um formato artesanal único.",
-      icon: (
-        <svg className="h-6 w-6 text-[#D64527]" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-        </svg>
-      ),
-    },
-    {
-      id: 2,
-      title: "Processo Lento e Natural",
-      description: "Nossa massa descansa por até 48 horas. O resultado é uma digestão incrivelmente leve, com bordas aeradas e crocantes.",
-      icon: (
-        <svg className="h-6 w-6 text-[#D64527]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      ),
-    },
-  ];
-
   return (
-    <section id="sobre" className="w-full bg-[#F5F0E6] py-16 md:py-24">
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
-          
-          {/* IMPORTAÇÃO DO COMPONENTE FILHO DA GALERIA */}
-          <Gallery />
+    <section
+      id="about"
+      className="border-b border-[#1B2A47]/5 bg-[#FAF9F6] py-20 md:py-24 lg:py-32"
+    >
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* BLOCO PRINCIPAL */}
+        <div className="mb-24 grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-20">
+          {/* IMAGEM */}
+          <div className="group relative lg:col-span-6">
+            {/* MOLDURA DECORATIVA */}
+            <div
+              aria-hidden="true"
+              className="
+                absolute inset-0 translate-x-4 translate-y-4
+                rounded-xl border-2 border-[#1B2A47]
+                transition-transform duration-300
+                group-hover:translate-x-5
+                group-hover:translate-y-5
+              "
+            />
 
-          {/* CONTEÚDO INSTITUCIONAL */}
-          <div className="w-full lg:w-1/2">
-            <span className="text-sm font-bold tracking-wider text-[#D64527] uppercase">
-              Nossa Cozinha & Espaço
-            </span>
-            
-            <h2 className="mt-2 text-3xl font-extrabold tracking-tight text-[#2C4233] sm:text-4xl">
-              Conheça a nossa <br />
-              <span className="text-[#2C4233]/70 font-medium">casa e nossa paixão.</span>
-            </h2>
-            
-            <p className="mt-4 text-base leading-relaxed text-[#2C4233]/80">
-              Acreditamos que comer pizza é uma experiência visual e afetiva. Navegue pela nossa galeria ao lado para conhecer nosso forno, o cuidado no preparo e o ambiente acolhedor que preparamos para receber você e sua família.
-            </p>
-
-            {/* LISTA DE TÓPICOS */}
-            <div className="mt-8 flex flex-col gap-4">
-              {topics.map((topic) => (
-                <div key={topic.id} className="flex gap-4 items-start rounded-2xl bg-white/40 p-4 backdrop-blur-sm border border-[#2C4233]/5 transition-all duration-300 hover:bg-white/80 hover:shadow-sm">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#D64527]/10">
-                    {topic.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-[#2C4233] text-sm">
-                      {topic.title}
-                    </h3>
-                    <p className="mt-0.5 text-xs leading-relaxed text-[#2C4233]/70">
-                      {topic.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
+            <div
+              className="
+                relative overflow-hidden rounded-xl
+                border border-[#1B2A47]/10
+                bg-[#1B2A47]/5
+                shadow-xl
+              "
+            >
+              <div className="relative aspect-4/5">
+                <Image
+                  src="/about.jpg"
+                alt="Barbeiro executando um corte clássico"
+                  fill
+                  priority={false}
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+              </div>
             </div>
           </div>
 
+          {/* TEXTO */}
+          <div className="space-y-6 lg:col-span-6">
+            <span className="block text-xs font-black uppercase tracking-widest text-[#9E1B1B] md:text-sm">
+              Nossa Filosofia
+            </span>
+
+            <h2
+              className="
+                text-3xl font-black uppercase
+                leading-tight tracking-tight
+                text-[#1B2A47]
+                sm:text-4xl
+                lg:text-5xl
+              "
+            >
+              Não fazemos apenas o corte.
+              <br />
+              Mantemos o seu legado.
+            </h2>
+
+            <div
+              aria-hidden="true"
+              className="h-1 w-16 bg-[#9E1B1B]"
+            />
+
+            <p className="text-base font-medium leading-relaxed text-[#4A5568] sm:text-lg">
+              Acreditamos que a cadeira de um barbeiro é um local sagrado de
+              renovação. Resgatamos o cuidado milenar da navalha e o conforto
+              das toalhas quentes para oferecer uma pausa justa na sua rotina
+              caótica.
+            </p>
+
+            <p className="text-sm leading-relaxed text-[#4A5568]/80 sm:text-base">
+              Aqui, a técnica impecável encontra a cultura urbana. Cada traço é
+              pensado individualmente para refletir a sua personalidade e
+              presença onde quer que você vá.
+            </p>
+          </div>
+        </div>
+
+        {/* EXPERIÊNCIA */}
+        <div className="border-t border-[#1B2A47]/10 pt-16">
+          <header className="mb-12 text-center md:text-left">
+            <h3 className="text-xl font-bold uppercase tracking-wider text-[#1B2A47]">
+              A Experiência no Salão
+            </h3>
+          </header>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12">
+            {steps.map((step) => (
+              <article
+                key={step.num}
+                className="
+                  group relative
+                  border-l-2 border-[#1B2A47]/10
+                  pl-6
+                  transition-colors duration-300
+                  hover:border-[#9E1B1B]
+                  md:border-l-0
+                  md:border-t-2
+                  md:pl-0
+                  md:pt-6
+                "
+              >
+                <span
+                  className="
+                    absolute -left-3.5 top-0
+                    block
+                    text-3xl font-black
+                    text-[#1B2A47]/20
+                    transition-colors duration-300
+                    group-hover:text-[#9E1B1B]
+                    md:static
+                  "
+                >
+                  {step.num}
+                </span>
+
+                <h4 className="mt-2 text-lg font-bold tracking-tight text-[#1B2A47] md:mt-3">
+                  {step.title}
+                </h4>
+
+                <p className="mt-2 text-sm leading-relaxed text-[#4A5568] sm:text-base">
+                  {step.desc}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>
