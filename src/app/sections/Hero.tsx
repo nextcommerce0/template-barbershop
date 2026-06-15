@@ -2,92 +2,103 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const images = [
   {
     src: "/hero.jpg",
-    alt: "",
-    className: "left-4 top-10 w-40 lg:left-8 lg:w-56 -rotate-6",
-    delay: 0,
+    alt: "Barbeiro realizando corte",
+    className: "left-4 top-16 w-44 xl:w-56 -rotate-6",
   },
   {
     src: "/hero2.jpg",
-    alt: "",
-    className: "left-24 top-72 w-36 lg:left-40 lg:w-44 rotate-3",
-    delay: 0.1,
+    alt: "Cliente em atendimento",
+    className: "left-12 bottom-20 w-40 xl:w-52 rotate-3",
   },
   {
     src: "/hero3.jpg",
-    alt: "",
-    className: "right-10 top-16 w-40 lg:right-16 lg:w-56 rotate-6",
-    delay: 0.2,
+    alt: "Detalhes do corte",
+    className:
+      "left-40 top-1/2 hidden xl:block -translate-y-1/2 w-36 xl:w-44 -rotate-3",
   },
   {
     src: "/hero4.jpg",
-    alt: "",
-    className: "right-32 bottom-16 w-36 lg:right-48 lg:w-44 -rotate-3",
-    delay: 0.3,
+    alt: "Ambiente da barbearia",
+    className: "right-4 top-16 w-44 xl:w-56 rotate-6",
   },
   {
     src: "/hero5.jpg",
-    alt: "",
-    className: "left-1/2 top-0 w-32 -translate-x-1/2 rotate-2",
-    delay: 0.4,
+    alt: "Barba alinhada",
+    className: "right-12 bottom-20 w-40 xl:w-52 -rotate-3",
   },
   {
     src: "/hero6.jpg",
-    alt: "",
-    className: "left-1/2 bottom-0 w-32 -translate-x-1/2 -rotate-2",
-    delay: 0.5,
+    alt: "Equipamentos premium",
+    className:
+      "right-40 top-1/2 hidden xl:block -translate-y-1/2 w-36 xl:w-44 rotate-3",
   },
 ];
 
 export default function Hero() {
+  const heroRef = useRef<HTMLElement | null>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["start end", "end start"],
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7], [0, 0.6, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [120, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
+
   return (
     <section
+      ref={heroRef}
       id="hero"
       className="
-        relative flex min-h-[90svh]
-        items-center justify-center
+        relative
+        flex
+        min-h-[90svh]
+        items-center
+        justify-center
         overflow-hidden
-        border-b border-[#1B2A47]/10
+        border-b
+        border-[#1B2A47]/10
         bg-[#FAF9F6]
       "
     >
-      {/* GRADIENTE */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(158,27,27,0.06),transparent_60%)]" />
+      {/* BACKGROUND DECORATIVO */}
+      <div
+        aria-hidden="true"
+        className="
+          absolute
+          inset-0
+          bg-[radial-gradient(circle_at_center,rgba(158,27,27,0.08),transparent_60%)]
+        "
+      />
 
-      {/* IMAGENS FLUTUANTES */}
+      {/* IMAGENS DECORATIVAS */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 hidden lg:block"
       >
-        {images.map((image) => (
+        {images.map((image, index) => (
           <motion.div
-            key={image.src}
-            initial={{
-              opacity: 0,
-              y: 80,
-              scale: 0.8,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-              scale: 1,
-            }}
-            viewport={{ once: true }}
-            transition={{
-              duration: 0.8,
-              delay: image.delay,
+            key={`${image.src}-${index}`}
+            style={{
+              opacity,
+              y,
+              scale,
             }}
             className={`
               absolute
               overflow-hidden
               rounded-2xl
-              border border-[#1B2A47]/10
+              border
+              border-[#1B2A47]/10
               bg-white
-              shadow-2xl
+              shadow-[0_25px_60px_rgba(27,42,71,0.12)]
               ${image.className}
             `}
           >
@@ -96,7 +107,8 @@ export default function Hero() {
                 src={image.src}
                 alt={image.alt}
                 fill
-                sizes="300px"
+                priority={index < 2}
+                sizes="(max-width: 1280px) 180px, 240px"
                 className="object-cover"
               />
             </div>
@@ -106,54 +118,38 @@ export default function Hero() {
 
       {/* CONTEÚDO */}
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         className="
-          relative z-10
-          mx-auto max-w-5xl
-          px-4 py-16
+          relative
+          z-10
+          mx-auto
+          max-w-4xl
+          px-4
+          py-16
           text-center
           sm:px-6
           md:py-24
           lg:px-8
         "
       >
-        {/* BADGE */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="
-            mb-6 inline-flex items-center gap-2
-            rounded-full
-            border border-[#1B2A47]/10
-            bg-white/80
-            px-4 py-2
-            backdrop-blur-sm
-          "
-        >
-          <span className="h-2 w-2 rounded-full bg-[#9E1B1B] animate-pulse" />
-
-          <span className="text-xs font-bold uppercase tracking-widest text-[#1B2A47]">
-            Agenda aberta para esta semana
-          </span>
-        </motion.div>
-
-        {/* TITULO */}
+        {/* TÍTULO */}
         <motion.h1
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="
-            mb-6
-            text-4xl font-black uppercase
-            leading-[0.95]
+            mb-5
+            text-3xl
+            font-black
+            uppercase
+            leading-[0.92]
             tracking-tight
             text-[#1B2A47]
-            sm:text-6xl
-            md:text-7xl
-            lg:text-8xl
+            sm:text-5xl
+            md:text-6xl
+            lg:text-7xl
           "
         >
           O CORTE IMPREVISTO.
@@ -161,18 +157,21 @@ export default function Hero() {
           <span className="mt-2 block text-[#9E1B1B]">A TRADIÇÃO EXIGIDA.</span>
         </motion.h1>
 
-        {/* TEXTO */}
+        {/* DESCRIÇÃO */}
         <motion.p
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="
-            mx-auto mb-10 max-w-2xl
-            text-base font-medium
+            mx-auto
+            mb-8
+            max-w-2xl
+            text-sm
+            font-medium
             leading-relaxed
             text-[#4A5568]
-            sm:text-lg
-            md:text-xl
+            sm:text-base
+            md:text-lg
           "
         >
           Elevamos a sua experiência de autocuidado através de técnicas
@@ -182,21 +181,37 @@ export default function Hero() {
 
         {/* BOTÕES */}
         <motion.div
-          initial={{ opacity: 0, y: 25 }}
+          initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+          className="
+            flex
+            flex-col
+            items-center
+            justify-center
+            gap-3
+            sm:flex-row
+          "
         >
           <Link
             href="#cta"
             className="
-              inline-flex w-full items-center justify-center
-              rounded-md bg-[#9E1B1B]
-              px-10 py-5
-              text-base font-black uppercase tracking-wider
+              inline-flex
+              w-full
+              items-center
+              justify-center
+              rounded-md
+              bg-[#9E1B1B]
+              px-8
+              py-4
+              text-sm
+              font-black
+              uppercase
+              tracking-wider
               text-[#FAF9F6]
               shadow-xl
-              transition-all duration-300
+              transition-all
+              duration-300
               hover:-translate-y-1
               hover:bg-[#821414]
               sm:w-auto
@@ -208,12 +223,22 @@ export default function Hero() {
           <Link
             href="#about"
             className="
-              inline-flex w-full items-center justify-center
-              rounded-md border border-[#1B2A47]
-              px-10 py-5
-              text-base font-bold uppercase tracking-wider
+              inline-flex
+              w-full
+              items-center
+              justify-center
+              rounded-md
+              border
+              border-[#1B2A47]
+              px-8
+              py-4
+              text-sm
+              font-bold
+              uppercase
+              tracking-wider
               text-[#1B2A47]
-              transition-all duration-300
+              transition-all
+              duration-300
               hover:bg-[#1B2A47]
               hover:text-[#FAF9F6]
               sm:w-auto
