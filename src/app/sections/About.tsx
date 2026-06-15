@@ -1,20 +1,23 @@
-import Image from 'next/image';
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
 
 const steps = [
   {
-    num: '01',
-    title: 'Agendamento Prático',
-    desc: 'Escolha seu profissional e horário em poucos cliques pelo site ou WhatsApp.',
+    num: "01",
+    title: "Agendamento Prático",
+    desc: "Escolha seu profissional e horário em poucos cliques pelo site ou WhatsApp.",
   },
   {
-    num: '02',
-    title: 'Consultoria de Estilo',
-    desc: 'Antes da tesoura, analisamos seu visagismo e formato de rosto para o melhor caimento.',
+    num: "02",
+    title: "Consultoria de Estilo",
+    desc: "Antes da tesoura, analisamos seu visagismo e formato de rosto para o melhor caimento.",
   },
   {
-    num: '03',
-    title: 'Execução Premium',
-    desc: 'Corte cirúrgico combinado com navalha, toalha quente e produtos importados.',
+    num: "03",
+    title: "Execução Premium",
+    desc: "Corte cirúrgico combinado com navalha, toalha quente e produtos importados.",
   },
 ];
 
@@ -28,7 +31,16 @@ export default function About() {
         {/* BLOCO PRINCIPAL */}
         <div className="mb-24 grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-20">
           {/* IMAGEM */}
-          <div className="group relative lg:col-span-6">
+          <motion.div
+            initial={{ opacity: 0, x: -60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              duration: 0.8,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+            className="group relative lg:col-span-6"
+          >
             {/* MOLDURA DECORATIVA */}
             <div
               aria-hidden="true"
@@ -52,18 +64,27 @@ export default function About() {
               <div className="relative aspect-4/5">
                 <Image
                   src="/about.jpg"
-                alt="Barbeiro executando um corte clássico"
+                  alt="Barbeiro executando um corte clássico"
                   fill
-                  priority={false}
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* TEXTO */}
-          <div className="space-y-6 lg:col-span-6">
+          <motion.div
+            initial={{ opacity: 0, x: 60 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.1,
+              ease: [0.25, 0.1, 0.25, 1],
+            }}
+            className="space-y-6 lg:col-span-6"
+          >
             <span className="block text-xs font-black uppercase tracking-widest text-[#9E1B1B] md:text-sm">
               Nossa Filosofia
             </span>
@@ -82,9 +103,15 @@ export default function About() {
               Mantemos o seu legado.
             </h2>
 
-            <div
-              aria-hidden="true"
-              className="h-1 w-16 bg-[#9E1B1B]"
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: 64 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                delay: 0.3,
+              }}
+              className="h-1 bg-[#9E1B1B]"
             />
 
             <p className="text-base font-medium leading-relaxed text-[#4A5568] sm:text-lg">
@@ -99,21 +126,53 @@ export default function About() {
               pensado individualmente para refletir a sua personalidade e
               presença onde quer que você vá.
             </p>
-          </div>
+          </motion.div>
         </div>
 
         {/* EXPERIÊNCIA */}
-        <div className="border-t border-[#1B2A47]/10 pt-16">
-          <header className="mb-12 text-center md:text-left">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="border-t border-[#1B2A47]/10 pt-16"
+        >
+          <motion.header
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mb-12 text-center md:text-left"
+          >
             <h3 className="text-xl font-bold uppercase tracking-wider text-[#1B2A47]">
               A Experiência no Salão
             </h3>
-          </header>
+          </motion.header>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12">
-            {steps.map((step) => (
-              <article
+            {steps.map((step, index) => (
+              <motion.article
                 key={step.num}
+                initial={{
+                  opacity: 0,
+                  y: 40,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.2,
+                }}
+                transition={{
+                  duration: 0.7,
+                  delay: index * 0.15,
+                  ease: [0.25, 0.1, 0.25, 1],
+                }}
+                whileHover={{
+                  y: -6,
+                }}
                 className="
                   group relative
                   border-l-2 border-[#1B2A47]/10
@@ -147,10 +206,10 @@ export default function About() {
                 <p className="mt-2 text-sm leading-relaxed text-[#4A5568] sm:text-base">
                   {step.desc}
                 </p>
-              </article>
+              </motion.article>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

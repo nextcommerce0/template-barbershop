@@ -2,59 +2,52 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 
 const images = [
   {
     src: "/hero.jpg",
     alt: "Barbeiro realizando corte",
     className: "left-4 top-16 w-44 xl:w-56 -rotate-6",
+    delay: 0.1,
   },
   {
     src: "/hero2.jpg",
     alt: "Cliente em atendimento",
     className: "left-12 bottom-20 w-40 xl:w-52 rotate-3",
+    delay: 0.2,
   },
   {
     src: "/hero3.jpg",
     alt: "Detalhes do corte",
     className:
       "left-40 top-1/2 hidden xl:block -translate-y-1/2 w-36 xl:w-44 -rotate-3",
+    delay: 0.3,
   },
   {
     src: "/hero4.jpg",
     alt: "Ambiente da barbearia",
     className: "right-4 top-16 w-44 xl:w-56 rotate-6",
+    delay: 0.4,
   },
   {
     src: "/hero5.jpg",
     alt: "Barba alinhada",
     className: "right-12 bottom-20 w-40 xl:w-52 -rotate-3",
+    delay: 0.5,
   },
   {
     src: "/hero6.jpg",
     alt: "Equipamentos premium",
     className:
       "right-40 top-1/2 hidden xl:block -translate-y-1/2 w-36 xl:w-44 rotate-3",
+    delay: 0.6,
   },
 ];
 
 export default function Hero() {
-  const heroRef = useRef<HTMLElement | null>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start end", "end start"],
-  });
-
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7], [0, 0.6, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [120, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [0.85, 1]);
-
   return (
     <section
-      ref={heroRef}
       id="hero"
       className="
         relative
@@ -68,7 +61,7 @@ export default function Hero() {
         bg-[#FAF9F6]
       "
     >
-      {/* BACKGROUND DECORATIVO */}
+      {/* BACKGROUND */}
       <div
         aria-hidden="true"
         className="
@@ -86,10 +79,24 @@ export default function Hero() {
         {images.map((image, index) => (
           <motion.div
             key={`${image.src}-${index}`}
-            style={{
-              opacity,
-              y,
-              scale,
+            initial={{
+              opacity: 0,
+              scale: 0.7,
+              y: 80,
+              rotate: 0,
+            }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              y: 0,
+            }}
+            transition={{
+              duration: 0.9,
+              delay: image.delay,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            whileHover={{
+              scale: 1.04,
             }}
             className={`
               absolute
@@ -107,7 +114,7 @@ export default function Hero() {
                 src={image.src}
                 alt={image.alt}
                 fill
-                priority={index < 2}
+                priority
                 sizes="(max-width: 1280px) 180px, 240px"
                 className="object-cover"
               />
@@ -134,14 +141,16 @@ export default function Hero() {
           lg:px-8
         "
       >
+        
+
         {/* TÍTULO */}
         <motion.h1
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          transition={{ delay: 0.35 }}
           className="
             mb-5
-            text-3xl
+            text-2xl
             font-black
             uppercase
             leading-[0.92]
@@ -154,14 +163,16 @@ export default function Hero() {
         >
           O CORTE IMPREVISTO.
           <br />
-          <span className="mt-2 block text-[#9E1B1B]">A TRADIÇÃO EXIGIDA.</span>
+          <span className="mt-2 block text-[#9E1B1B]">
+            A TRADIÇÃO EXIGIDA.
+          </span>
         </motion.h1>
 
         {/* DESCRIÇÃO */}
         <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          transition={{ delay: 0.5 }}
           className="
             mx-auto
             mb-8
@@ -183,7 +194,7 @@ export default function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.65 }}
           className="
             flex
             flex-col
